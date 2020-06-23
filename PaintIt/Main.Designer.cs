@@ -118,7 +118,7 @@
             this.MaximizeBox = false;
             this.Name = "Main";
             this.ShowIcon = false;
-            this.Text = "PaintIt";
+            this.Text = "Paint-it";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
