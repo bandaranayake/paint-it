@@ -120,49 +120,64 @@ namespace PaintIt
 
         private void btnDraw_Click(object sender, EventArgs e)
         {
-            Hide();
-            Thread.Sleep(500);
-
-            Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-
-            using (Graphics g = Graphics.FromImage(image))
+            if (pbxPreview.Image == null)
             {
-                g.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, image.Size, CopyPixelOperation.SourceCopy);
-                g.DrawRectangle(Pens.Red, 1, 1, image.Width - 2, image.Height - 2);
+                MessageBox.Show("No image selected. Click 'Browse' to select an image.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            ScreenOverlay overlay = new ScreenOverlay(image);
-            Show();
-
-            if (overlay.ShowDialog() == DialogResult.OK)
+            else
             {
-                WindowState = FormWindowState.Minimized;
-                image.Dispose();
-                Bitmap bmp = ResizeImage(pbxPreview.Image, overlay.Dim.Width, overlay.Dim.Height);
-                Thread.Sleep(1000);
+                Hide();
+                Thread.Sleep(500);
 
-                _lastPoint = new Point(-1, -1);
-                _pid = GetActiveProcess();
+                Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
 
-                Draw(bmp, overlay.Pos.X, overlay.Pos.Y);
-                WindowState = FormWindowState.Normal;
+                using (Graphics g = Graphics.FromImage(image))
+                {
+                    g.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, image.Size, CopyPixelOperation.SourceCopy);
+                    g.DrawRectangle(Pens.Red, 1, 1, image.Width - 3, image.Height - 3);
+                }
+
+                ScreenOverlay overlay = new ScreenOverlay(image);
+                Show();
+
+                if (overlay.ShowDialog() == DialogResult.OK)
+                {
+                    WindowState = FormWindowState.Minimized;
+                    image.Dispose();
+                    Bitmap bmp = ResizeImage(pbxPreview.Image, overlay.Dim.Width, overlay.Dim.Height);
+                    Thread.Sleep(1000);
+
+                    _lastPoint = new Point(-1, -1);
+                    _pid = GetActiveProcess();
+
+                    Draw(bmp, overlay.Pos.X, overlay.Pos.Y);
+                    WindowState = FormWindowState.Normal;
+                }
             }
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dlg = new OpenFileDialog())
+            try
             {
-                dlg.Title = "Open";
-                dlg.Filter = "Image files(*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
-
-                if (dlg.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog dlg = new OpenFileDialog())
                 {
-                    using (Image im = Image.FromFile(dlg.FileName))
+                    dlg.Title = "Open";
+                    dlg.Filter = "Image files(*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+
+                    if (dlg.ShowDialog() == DialogResult.OK)
                     {
-                        pbxPreview.Image = new Bitmap(im);
+                        using (Image im = Image.FromFile(dlg.FileName))
+                        {
+                            pbxPreview.Image = new Bitmap(im);
+                        }
                     }
                 }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
