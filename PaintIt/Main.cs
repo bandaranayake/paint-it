@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Util;
+using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -28,6 +29,11 @@ namespace PaintIt
         private Point _lastPoint = new Point(-1, -1);
         private uint _pid;
 
+        private Mat _original;
+        private Mat _img = new Mat();
+        private ThresholdType _thresholdType = ThresholdType.Binary;
+        private double _maxIntensity;
+
         public Main()
         {
             InitializeComponent();
@@ -43,31 +49,6 @@ namespace PaintIt
             _lastPoint = new Point(xpos2, ypos2);
         }
 
-        private Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
-
         private uint GetActiveProcess()
         {
             uint pid;
@@ -75,23 +56,50 @@ namespace PaintIt
             return pid;
         }
 
-        private void Draw(Bitmap image, int x, int y)
+        private void Draw(Mat image, int x, int y)
         {
-            for (int i = 0; i < image.Height; i++)
+            VectorOfVectorOfPoint cnt = new VectorOfVectorOfPoint();
+            CvInvoke.FindContours(image, cnt, null, RetrType.List, ChainApproxMethod.ChainApproxNone);
+
+            Point[][] pts = cnt.ToArrayOfArray();
+
+            for (int i = 0; i < pts.Length; i++)
             {
-                int c = 0;
-                for (int j = 0; j < image.Width; j++)
+                for (int j = 0; j < pts[i].Length; j++)
                 {
-                    Color oc = image.GetPixel(j, i);
-                    uint xx = GetActiveProcess();
-                    if ((_lastPoint.X != -1 && !_lastPoint.Equals(MousePosition)) || _pid != xx)
+                    Point pt = pts[i][j];
+                    if ((_lastPoint.X != -1 && !_lastPoint.Equals(MousePosition)) || _pid != GetActiveProcess())
                     {
                         return;
                     }
 
-                    if ((int)((oc.R * 0.3) + (oc.G * 0.59) + (oc.B * 0.11)) < 110)
+                    pt.X += x;
+                    pt.Y += y;
+
+                    LeftMouseClick(pt.X, pt.Y, pt.X, pt.Y);
+                    Thread.Sleep(10);
+                }
+            }
+            Fill(image, x, y);
+        }
+
+        private void Fill(Mat image, int x, int y)
+        {
+            Array data = image.GetData();
+
+            for (int i = 0; i < image.Rows; i++)
+            {
+                int c = 0;
+                for (int j = 0; j < image.Cols; j++)
+                {
+                    if ((_lastPoint.X != -1 && !_lastPoint.Equals(MousePosition)) || _pid != GetActiveProcess())
                     {
-                        if (j == image.Width - 1 && c > 0)
+                        return;
+                    }
+
+                    if ((byte)data.GetValue(i, j) == _maxIntensity)
+                    {
+                        if (j == image.Cols - 1 && c > 0)
                         {
                             int x1 = x + j;
                             int y1 = y + i;
@@ -118,9 +126,36 @@ namespace PaintIt
             }
         }
 
+        private void radThresh_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radBin.Checked)
+            {
+                _thresholdType = ThresholdType.Binary;
+            }
+            else if (radBinInv.Checked)
+            {
+                _thresholdType = ThresholdType.BinaryInv;
+            }
+            else if (radOTSU.Checked)
+            {
+                _thresholdType = ThresholdType.Otsu;
+            }
+
+            if (_original != null)
+            {
+                CvInvoke.Threshold(_original, _img, trackBarThresh.Value, _maxIntensity, _thresholdType);
+                pbxPreview.BackgroundImage = _img.Bitmap;
+            }
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            lblPixel.Text = "Threshold Value: " + trackBarThresh.Value.ToString();
+        }
+
         private void btnDraw_Click(object sender, EventArgs e)
         {
-            if (pbxPreview.Image == null)
+            if (_original == null)
             {
                 MessageBox.Show("No image selected. Click 'Browse' to select an image.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -144,13 +179,16 @@ namespace PaintIt
                 {
                     WindowState = FormWindowState.Minimized;
                     image.Dispose();
-                    Bitmap bmp = ResizeImage(pbxPreview.Image, overlay.Dim.Width, overlay.Dim.Height);
-                    Thread.Sleep(1000);
+
+                    CvInvoke.Resize(_img, _img, new Size(_img.Cols, _img.Rows));
+                    CvInvoke.BitwiseNot(_img, _img);
+
+                    Thread.Sleep(2000);
 
                     _lastPoint = new Point(-1, -1);
                     _pid = GetActiveProcess();
 
-                    Draw(bmp, overlay.Pos.X, overlay.Pos.Y);
+                    Draw(_img, overlay.Pos.X, overlay.Pos.Y);
                     WindowState = FormWindowState.Normal;
                 }
             }
@@ -167,10 +205,16 @@ namespace PaintIt
 
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
-                        using (Image im = Image.FromFile(dlg.FileName))
-                        {
-                            pbxPreview.Image = new Bitmap(im);
-                        }
+                        _original = CvInvoke.Imread(dlg.FileName, ImreadModes.Grayscale);
+
+                        double[] minValue, maxValue;
+                        Point[] minLocation, maxLocation;
+                        _original.MinMax(out minValue, out maxValue, out minLocation, out maxLocation);
+                        _maxIntensity = maxValue[0];
+                        trackBarThresh.Maximum = (int)_maxIntensity;
+
+                        CvInvoke.Threshold(_original, _img, trackBarThresh.Value, _maxIntensity, _thresholdType);
+                        pbxPreview.BackgroundImage = _img.Bitmap;
                     }
                 }
 
@@ -179,6 +223,16 @@ namespace PaintIt
             {
                 MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void trackBarThresh_Scroll(object sender, EventArgs e)
+        {
+            if (_original != null)
+            {
+                CvInvoke.Threshold(_original, _img, trackBarThresh.Value, _maxIntensity, _thresholdType);
+                pbxPreview.BackgroundImage = _img.Bitmap;
+            }
+            lblPixel.Text = "Threshold Value: " + trackBarThresh.Value.ToString();
         }
     }
 }

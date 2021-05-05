@@ -28,113 +28,185 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.pbxPreview = new System.Windows.Forms.PictureBox();
+            this.trackBarThresh = new System.Windows.Forms.TrackBar();
+            this.groupBox = new System.Windows.Forms.GroupBox();
             this.btnDraw = new System.Windows.Forms.Button();
             this.btnBrowse = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.pbxPreview = new System.Windows.Forms.PictureBox();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblPixel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radOTSU = new System.Windows.Forms.RadioButton();
+            this.radBinInv = new System.Windows.Forms.RadioButton();
+            this.radBin = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pbxPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarThresh)).BeginInit();
+            this.groupBox.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // pbxPreview
+            // 
+            this.pbxPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbxPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pbxPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbxPreview.Location = new System.Drawing.Point(152, 13);
+            this.pbxPreview.Name = "pbxPreview";
+            this.pbxPreview.Size = new System.Drawing.Size(400, 400);
+            this.pbxPreview.TabIndex = 0;
+            this.pbxPreview.TabStop = false;
+            // 
+            // trackBarThresh
+            // 
+            this.trackBarThresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackBarThresh.AutoSize = false;
+            this.trackBarThresh.Location = new System.Drawing.Point(152, 419);
+            this.trackBarThresh.Maximum = 1;
+            this.trackBarThresh.Name = "trackBarThresh";
+            this.trackBarThresh.Size = new System.Drawing.Size(400, 34);
+            this.trackBarThresh.TabIndex = 1;
+            this.trackBarThresh.TickFrequency = 5;
+            this.trackBarThresh.Scroll += new System.EventHandler(this.trackBarThresh_Scroll);
+            // 
+            // groupBox
+            // 
+            this.groupBox.Controls.Add(this.btnDraw);
+            this.groupBox.Controls.Add(this.btnBrowse);
+            this.groupBox.Location = new System.Drawing.Point(12, 13);
+            this.groupBox.Name = "groupBox";
+            this.groupBox.Size = new System.Drawing.Size(128, 107);
+            this.groupBox.TabIndex = 2;
+            this.groupBox.TabStop = false;
+            this.groupBox.Text = "Functions";
             // 
             // btnDraw
             // 
-            this.btnDraw.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btnDraw.Location = new System.Drawing.Point(94, 8);
+            this.btnDraw.Location = new System.Drawing.Point(14, 61);
             this.btnDraw.Name = "btnDraw";
-            this.btnDraw.Size = new System.Drawing.Size(75, 23);
-            this.btnDraw.TabIndex = 1;
+            this.btnDraw.Size = new System.Drawing.Size(100, 25);
+            this.btnDraw.TabIndex = 5;
             this.btnDraw.Text = "Draw";
             this.btnDraw.UseVisualStyleBackColor = true;
             this.btnDraw.Click += new System.EventHandler(this.btnDraw_Click);
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btnBrowse.Location = new System.Drawing.Point(12, 8);
+            this.btnBrowse.Location = new System.Drawing.Point(14, 30);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowse.TabIndex = 0;
-            this.btnBrowse.Text = "Browse ";
+            this.btnBrowse.Size = new System.Drawing.Size(100, 25);
+            this.btnBrowse.TabIndex = 3;
+            this.btnBrowse.Text = "Browse";
             this.btnBrowse.UseVisualStyleBackColor = true;
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
-            // tableLayoutPanel1
+            // statusStrip1
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.46563F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.534369F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(427, 451);
-            this.tableLayoutPanel1.TabIndex = 3;
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblPixel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 469);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.statusStrip1.Size = new System.Drawing.Size(564, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
             // 
-            // panel1
+            // lblPixel
             // 
-            this.panel1.Controls.Add(this.btnDraw);
-            this.panel1.Controls.Add(this.btnBrowse);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 410);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(2);
-            this.panel1.Size = new System.Drawing.Size(421, 38);
-            this.panel1.TabIndex = 0;
+            this.lblPixel.Margin = new System.Windows.Forms.Padding(5, 3, 5, 2);
+            this.lblPixel.Name = "lblPixel";
+            this.lblPixel.Size = new System.Drawing.Size(0, 17);
             // 
-            // panel2
+            // groupBox1
             // 
-            this.panel2.Controls.Add(this.pbxPreview);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(3, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(5);
-            this.panel2.Size = new System.Drawing.Size(421, 401);
-            this.panel2.TabIndex = 1;
+            this.groupBox1.Controls.Add(this.radOTSU);
+            this.groupBox1.Controls.Add(this.radBinInv);
+            this.groupBox1.Controls.Add(this.radBin);
+            this.groupBox1.Location = new System.Drawing.Point(12, 133);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(128, 105);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Threshold";
             // 
-            // pbxPreview
+            // radOTSU
             // 
-            this.pbxPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbxPreview.Location = new System.Drawing.Point(5, 5);
-            this.pbxPreview.Name = "pbxPreview";
-            this.pbxPreview.Size = new System.Drawing.Size(411, 391);
-            this.pbxPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbxPreview.TabIndex = 2;
-            this.pbxPreview.TabStop = false;
+            this.radOTSU.AutoSize = true;
+            this.radOTSU.Location = new System.Drawing.Point(14, 76);
+            this.radOTSU.Name = "radOTSU";
+            this.radOTSU.Size = new System.Drawing.Size(55, 17);
+            this.radOTSU.TabIndex = 10;
+            this.radOTSU.Text = "OTSU";
+            this.radOTSU.UseVisualStyleBackColor = true;
+            this.radOTSU.CheckedChanged += new System.EventHandler(this.radThresh_CheckedChanged);
+            // 
+            // radBinInv
+            // 
+            this.radBinInv.AutoSize = true;
+            this.radBinInv.Location = new System.Drawing.Point(15, 53);
+            this.radBinInv.Name = "radBinInv";
+            this.radBinInv.Size = new System.Drawing.Size(92, 17);
+            this.radBinInv.TabIndex = 6;
+            this.radBinInv.Text = "Binary Inverse";
+            this.radBinInv.UseVisualStyleBackColor = true;
+            this.radBinInv.CheckedChanged += new System.EventHandler(this.radThresh_CheckedChanged);
+            // 
+            // radBin
+            // 
+            this.radBin.AutoSize = true;
+            this.radBin.Checked = true;
+            this.radBin.Location = new System.Drawing.Point(15, 30);
+            this.radBin.Name = "radBin";
+            this.radBin.Size = new System.Drawing.Size(54, 17);
+            this.radBin.TabIndex = 5;
+            this.radBin.TabStop = true;
+            this.radBin.Text = "Binary";
+            this.radBin.UseVisualStyleBackColor = true;
+            this.radBin.CheckedChanged += new System.EventHandler(this.radThresh_CheckedChanged);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 451);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.ClientSize = new System.Drawing.Size(564, 491);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.groupBox);
+            this.Controls.Add(this.trackBarThresh);
+            this.Controls.Add(this.pbxPreview);
             this.Name = "Main";
             this.ShowIcon = false;
             this.Text = "Paint-it";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbxPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarThresh)).EndInit();
+            this.groupBox.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnDraw;
-        private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pbxPreview;
+        private System.Windows.Forms.TrackBar trackBarThresh;
+        private System.Windows.Forms.GroupBox groupBox;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.Button btnDraw;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel lblPixel;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton radBinInv;
+        private System.Windows.Forms.RadioButton radBin;
+        private System.Windows.Forms.RadioButton radOTSU;
     }
 }
 
