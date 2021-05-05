@@ -20,10 +20,10 @@ Install [.NET Framework, Version=v4.5.2](https://www.microsoft.com/en-us/downloa
 
 2. Click 'Draw'.
 
-<img src="/screenshots/2.jpg" alt="Step 3"/>
-
 3. Select the drawable area on the graphics editor by clicking the left mouse button and dragging. Press 'ESC' key to cancel the process.
    On releasing the left mouse button the program will start to draw the image. Move the mouse to stop drawing.
 
-### :warning: Warning 
+<img src="/screenshots/2.jpg" alt="Step 3"/>
+
+## :warning: Warning 
 This program has not tested on computers with multiple screens and it might give unexpected behaviors.
